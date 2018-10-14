@@ -1,12 +1,14 @@
 package com.br.andsas.servicies;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.br.andsas.domain.Categoria;
 import com.br.andsas.repositories.CategoriaRepository;
+import com.br.andsas.servicies.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -19,7 +21,10 @@ public class CategoriaService {
 	}
 	
 	public Categoria findById(Integer id) {		
-		return repository.findById(id).orElse(null);
+		Optional<Categoria> obj = repository.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+			"Objeto não encontrado. Id: " + id + ". Tipo: " + Categoria.class.getName())
+		);
 	}
 
 }
