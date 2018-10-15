@@ -34,14 +34,16 @@ public class Categoria implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Integer getId() {
 		return id;
-	}	
+	}
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
 	
 	public String getNome() {
 		return nome;
-	}	
+	}
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -51,6 +53,7 @@ public class Categoria implements Serializable {
 	public List<Produto> getProdutos() {
 		return produtos;
 	}
+	
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
 	}

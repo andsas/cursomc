@@ -7,10 +7,15 @@ import org.springframework.stereotype.Component;
 
 import com.br.andsas.domain.Categoria;
 import com.br.andsas.domain.Cidade;
+import com.br.andsas.domain.Cliente;
+import com.br.andsas.domain.Endereco;
 import com.br.andsas.domain.Estado;
 import com.br.andsas.domain.Produto;
+import com.br.andsas.domain.enuns.TipoCliente;
 import com.br.andsas.repositories.CategoriaRepository;
 import com.br.andsas.repositories.CidadeRepository;
+import com.br.andsas.repositories.ClienteRepository;
+import com.br.andsas.repositories.EnderecoRepository;
 import com.br.andsas.repositories.EstadoRepository;
 import com.br.andsas.repositories.ProdutoRepository;
 
@@ -28,11 +33,17 @@ public class DataInitiation {
 
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public void insertValues() {
 		
 		/*
-		 * Adicionando categorias e produtos à base de dados
+		 * Adicionando Categoria e Produto à base de dados
 		 * 
 		 */
 
@@ -54,7 +65,7 @@ public class DataInitiation {
 		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3));
 		
 		/*
-		 * Adicionando estados e cidades à base de dados
+		 * Adicionando Estado e Cidade à base de dados
 		 * 
 		 */
 		
@@ -70,6 +81,22 @@ public class DataInitiation {
 		
 		estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
+		
+		/*
+		 * Adicionando Cliente e Endereço à base de dados
+		 * 
+		 */
+		
+		Cliente cliente1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cliente1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
+		
+		Endereco endereco1 = new Endereco(null, "Rua Flores", "300", "Ap 303", "Jardim", "38220834", cidade1, cliente1);
+		Endereco endereco2 = new Endereco(null, "Av Matos", "105", "Sala 800", "Centro", "38777012", cidade2, cliente1);
+		
+		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		
+		clienteRepository.saveAll(Arrays.asList(cliente1));
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
 
 	}
 
