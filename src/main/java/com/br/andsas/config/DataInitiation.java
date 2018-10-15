@@ -1,5 +1,7 @@
 package com.br.andsas.config;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,20 @@ import com.br.andsas.domain.Cidade;
 import com.br.andsas.domain.Cliente;
 import com.br.andsas.domain.Endereco;
 import com.br.andsas.domain.Estado;
+import com.br.andsas.domain.Pagamento;
+import com.br.andsas.domain.PagamentoComBoleto;
+import com.br.andsas.domain.PagamentoComCartao;
+import com.br.andsas.domain.Pedido;
 import com.br.andsas.domain.Produto;
+import com.br.andsas.domain.enuns.EstadoPagamento;
 import com.br.andsas.domain.enuns.TipoCliente;
 import com.br.andsas.repositories.CategoriaRepository;
 import com.br.andsas.repositories.CidadeRepository;
 import com.br.andsas.repositories.ClienteRepository;
 import com.br.andsas.repositories.EnderecoRepository;
 import com.br.andsas.repositories.EstadoRepository;
+import com.br.andsas.repositories.PagamentoRepository;
+import com.br.andsas.repositories.PedidoRepository;
 import com.br.andsas.repositories.ProdutoRepository;
 
 @Component
@@ -39,8 +48,14 @@ public class DataInitiation {
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 
-	public void insertValues() {
+	public void insertValues() throws ParseException {
 		
 		/*
 		 * Adicionando Categoria e Produto à base de dados
@@ -97,6 +112,31 @@ public class DataInitiation {
 		
 		clienteRepository.saveAll(Arrays.asList(cliente1));
 		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		
+		/*
+		 * Adicionando Pedido e Pagamento à base de dados
+		 * 
+		 */
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy HH:mm");
+
+		Pedido pedido1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cliente1, endereco1);
+		Pedido pedido2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cliente1, endereco2);
+		
+		Pagamento pagamento1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
+		pedido1.setPagamento(pagamento1);
+		
+		Pagamento pagamento2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, sdf.parse("20/10/2017 00:00"), null);
+		pedido2.setPagamento(pagamento2);
+		
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		
+		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
+		
+		System.err.println(pagamento1.getEstado().getCod());
+		System.err.println(pagamento2.getEstado().getCod());
+		
 
 	}
 
