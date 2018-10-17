@@ -2,6 +2,8 @@ package com.br.andsas.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,20 +12,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class Pedido implements Serializable {
-	
+public class Pedido implements Serializable {	
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date instant;
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
+	@ManyToOne
+	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
+	@ManyToOne
+	@JoinColumn(name="endereco_id")
 	private Endereco enderecoDeEntrega;
+	@OneToMany(mappedBy="id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Pedido() {		
 	}
@@ -35,9 +47,7 @@ public class Pedido implements Serializable {
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	public Integer getId() {
 		return id;
 	}
@@ -45,8 +55,7 @@ public class Pedido implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	@Temporal(TemporalType.TIMESTAMP)
+	
 	public Date getInstant() {
 		return instant;
 	}
@@ -54,8 +63,7 @@ public class Pedido implements Serializable {
 	public void setInstant(Date instant) {
 		this.instant = instant;
 	}
-
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
+	
 	public Pagamento getPagamento() {
 		return pagamento;
 	}
@@ -63,9 +71,7 @@ public class Pedido implements Serializable {
 	public void setPagamento(Pagamento pagamento) {
 		this.pagamento = pagamento;
 	}
-
-	@ManyToOne
-	@JoinColumn(name="cliente_id")
+	
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -73,15 +79,21 @@ public class Pedido implements Serializable {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-
-	@ManyToOne
-	@JoinColumn(name="endereco_id")
+	
 	public Endereco getEnderecoDeEntrega() {
 		return enderecoDeEntrega;
 	}
 
 	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
 		this.enderecoDeEntrega = enderecoDeEntrega;
+	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
 	}
 
 	@Override

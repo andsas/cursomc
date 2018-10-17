@@ -9,11 +9,12 @@ import javax.persistence.TemporalType;
 import com.br.andsas.domain.enuns.EstadoPagamento;
 
 @Entity
-public class PagamentoComBoleto extends Pagamento {
-	
+public class PagamentoComBoleto extends Pagamento {	
 	private static final long serialVersionUID = 1L;
 	
+	@Temporal(TemporalType.DATE)
 	private Date dataVencimento;
+	@Temporal(TemporalType.DATE)
 	private Date dataPagamento;
 	
 	public PagamentoComBoleto() {		
@@ -24,8 +25,7 @@ public class PagamentoComBoleto extends Pagamento {
 		this.dataVencimento = dataVencimento;
 		this.dataPagamento = dataPagamento;
 	}
-
-	@Temporal(TemporalType.DATE)
+	
 	public Date getDataVencimento() {
 		return dataVencimento;
 	}
@@ -34,7 +34,6 @@ public class PagamentoComBoleto extends Pagamento {
 		this.dataVencimento = dataVencimento;
 	}
 
-	@Temporal(TemporalType.DATE)
 	public Date getDataPagamento() {
 		return dataPagamento;
 	}

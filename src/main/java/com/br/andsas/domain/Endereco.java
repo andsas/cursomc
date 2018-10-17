@@ -13,16 +13,22 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Endereco implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String logradouro;
 	private String numero;
 	private String complemento;
 	private String bairro;
 	private String cep;
+	@ManyToOne
+	@JoinColumn(name="cidade_id")
 	private Cidade cidade;
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
 	
 	public Endereco() {		
@@ -40,9 +46,7 @@ public class Endereco implements Serializable {
 		this.cidade = cidade;
 		this.cliente = cliente;
 	}
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	public Integer getId() {
 		return id;
 	}
@@ -89,10 +93,8 @@ public class Endereco implements Serializable {
 	
 	public void setCep(String cep) {
 		this.cep = cep;
-	}	
-
-	@ManyToOne
-	@JoinColumn(name="cidade_id")
+	}
+	
 	public Cidade getCidade() {
 		return cidade;
 	}
@@ -100,10 +102,7 @@ public class Endereco implements Serializable {
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
-
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name="cliente_id")
+	
 	public Cliente getCliente() {
 		return cliente;
 	}

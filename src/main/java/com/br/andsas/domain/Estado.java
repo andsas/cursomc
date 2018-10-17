@@ -13,12 +13,15 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Estado implements Serializable {
-	
+public class Estado implements Serializable {	
 	private static final long serialVersionUID = 1L;	
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	@JsonBackReference
+	@OneToMany(mappedBy="estado")
 	private List<Cidade> cidades = new ArrayList<>();
 	
 	public Estado() {		
@@ -29,9 +32,7 @@ public class Estado implements Serializable {
 		this.id = id;
 		this.nome = nome;
 	}
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	public Integer getId() {
 		return id;
 	}
@@ -47,9 +48,7 @@ public class Estado implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	@JsonBackReference
-	@OneToMany(mappedBy="estado")
+	
 	public List<Cidade> getCidades() {
 		return cidades;
 	}

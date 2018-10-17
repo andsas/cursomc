@@ -14,11 +14,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Categoria implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;	
 	private String nome;	
+	@JsonManagedReference
+	@ManyToMany(mappedBy="categorias")
 	private List<Produto> produtos = new ArrayList<>();
 	
 	public Categoria() {		
@@ -29,9 +32,7 @@ public class Categoria implements Serializable {
 		this.id = id;
 		this.nome = nome;
 	}
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	public Integer getId() {
 		return id;
 	}
@@ -46,10 +47,8 @@ public class Categoria implements Serializable {
 	
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
+	}	
 	
-	@JsonManagedReference
-	@ManyToMany(mappedBy="categorias")
 	public List<Produto> getProdutos() {
 		return produtos;
 	}
