@@ -3,6 +3,8 @@ package com.br.andsas.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.br.andsas.domain.enuns.EstadoPagamento;
 
@@ -23,6 +25,7 @@ public class PagamentoComBoleto extends Pagamento {
 		this.dataPagamento = dataPagamento;
 	}
 
+	@Temporal(TemporalType.DATE)
 	public Date getDataVencimento() {
 		return dataVencimento;
 	}
@@ -31,6 +34,7 @@ public class PagamentoComBoleto extends Pagamento {
 		this.dataVencimento = dataVencimento;
 	}
 
+	@Temporal(TemporalType.DATE)
 	public Date getDataPagamento() {
 		return dataPagamento;
 	}

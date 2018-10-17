@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Pedido implements Serializable {
@@ -44,6 +46,7 @@ public class Pedido implements Serializable {
 		this.id = id;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getInstant() {
 		return instant;
 	}
@@ -72,7 +75,7 @@ public class Pedido implements Serializable {
 	}
 
 	@ManyToOne
-	@JoinColumn(name="endereco_de_entrega_id")
+	@JoinColumn(name="endereco_id")
 	public Endereco getEnderecoDeEntrega() {
 		return enderecoDeEntrega;
 	}
