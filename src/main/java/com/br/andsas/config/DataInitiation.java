@@ -12,6 +12,7 @@ import com.br.andsas.domain.Cidade;
 import com.br.andsas.domain.Cliente;
 import com.br.andsas.domain.Endereco;
 import com.br.andsas.domain.Estado;
+import com.br.andsas.domain.ItemPedido;
 import com.br.andsas.domain.Pagamento;
 import com.br.andsas.domain.PagamentoComBoleto;
 import com.br.andsas.domain.PagamentoComCartao;
@@ -24,6 +25,7 @@ import com.br.andsas.repositories.CidadeRepository;
 import com.br.andsas.repositories.ClienteRepository;
 import com.br.andsas.repositories.EnderecoRepository;
 import com.br.andsas.repositories.EstadoRepository;
+import com.br.andsas.repositories.ItemPedidoRepository;
 import com.br.andsas.repositories.PagamentoRepository;
 import com.br.andsas.repositories.PedidoRepository;
 import com.br.andsas.repositories.ProdutoRepository;
@@ -54,6 +56,9 @@ public class DataInitiation {
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public void insertValues() throws ParseException {
 		
@@ -62,56 +67,56 @@ public class DataInitiation {
 		 * 
 		 */
 
-		Categoria categoria1 = new Categoria(null, "Informatica");
-		Categoria categoria2 = new Categoria(null, "Escritorio");
+		Categoria cat1 = new Categoria(null, "Informatica");
+		Categoria cat2 = new Categoria(null, "Escritorio");
 
-		Produto produto1 = new Produto(null, "Computador", 2000.00);
-		Produto produto2 = new Produto(null, "Impressora", 800.00);
-		Produto produto3 = new Produto(null, "Mouse", 80.00);		
+		Produto p1 = new Produto(null, "Computador", 2000.00);
+		Produto p2 = new Produto(null, "Impressora", 800.00);
+		Produto p3 = new Produto(null, "Mouse", 80.00);		
 
-		categoria1.getProdutos().addAll(Arrays.asList(produto1, produto2, produto3));
-		categoria2.getProdutos().addAll(Arrays.asList(produto2));
+		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
+		cat2.getProdutos().addAll(Arrays.asList(p2));
 
-		produto1.getCategorias().addAll(Arrays.asList(categoria1));
-		produto2.getCategorias().addAll(Arrays.asList(categoria1, categoria2));
-		produto3.getCategorias().addAll(Arrays.asList(categoria1));
+		p1.getCategorias().addAll(Arrays.asList(cat1));
+		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
+		p3.getCategorias().addAll(Arrays.asList(cat1));
 
-		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
-		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3));
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		
 		/*
 		 * Adicionando Estado e Cidade à base de dados
 		 * 
 		 */
 		
-		Estado estado1 = new Estado(null, "Minas Gerais");
-		Estado estado2 = new Estado(null, "Sao Paulo");
+		Estado est1 = new Estado(null, "Minas Gerais");
+		Estado est2 = new Estado(null, "Sao Paulo");
 		
-		Cidade cidade1 = new Cidade(null, "Uberlandia", estado1);
-		Cidade cidade2 = new Cidade(null, "Sao Paulo", estado2);
-		Cidade cidade3 = new Cidade(null, "Campinas", estado2);
+		Cidade c1 = new Cidade(null, "Uberlandia", est1);
+		Cidade c2 = new Cidade(null, "Sao Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
 		
-		estado1.getCidades().addAll(Arrays.asList(cidade1));
-		estado2.getCidades().addAll(Arrays.asList(cidade2, cidade3));
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est2.getCidades().addAll(Arrays.asList(c2, c3));
 		
-		estadoRepository.saveAll(Arrays.asList(estado1, estado2));
-		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
+		estadoRepository.saveAll(Arrays.asList(est1, est2));
+		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
 		/*
 		 * Adicionando Cliente e Endereço à base de dados
 		 * 
 		 */
 		
-		Cliente cliente1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
-		cliente1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
+		Cliente cl1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cl1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
 		
-		Endereco endereco1 = new Endereco(null, "Rua Flores", "300", "Ap 303", "Jardim", "38220834", cidade1, cliente1);
-		Endereco endereco2 = new Endereco(null, "Av Matos", "105", "Sala 800", "Centro", "38777012", cidade2, cliente1);
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Ap 303", "Jardim", "38220834", c1, cl1);
+		Endereco e2 = new Endereco(null, "Av Matos", "105", "Sala 800", "Centro", "38777012", c2, cl1);
 		
-		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		cl1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		
-		clienteRepository.saveAll(Arrays.asList(cliente1));
-		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		clienteRepository.saveAll(Arrays.asList(cl1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 		
 		/*
 		 * Adicionando Pedido e Pagamento à base de dados
@@ -120,19 +125,37 @@ public class DataInitiation {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy HH:mm");
 
-		Pedido pedido1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cliente1, endereco1);
-		Pedido pedido2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cliente1, endereco2);
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cl1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cl1, e2);
 		
-		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		cl1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 		
-		Pagamento pagamento1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
-		pedido1.setPagamento(pagamento1);
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
 		
-		Pagamento pagamento2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, sdf.parse("20/10/2017 00:00"), null);
-		pedido2.setPagamento(pagamento2);		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);		
 		
-		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
-		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		/*
+		 * Adicionando ItemPedido e Pedido
+		 * 
+		 */		
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip1));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 
 	}
 
